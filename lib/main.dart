@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_states_widgets_routes/cutoms/itemList.dart';
 import 'package:flutter_states_widgets_routes/models/Language.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_states_widgets_routes/screens/AddLanguage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      initialRoute: "/",
+      routes: {
+        "/" : (context) => const MyHomePage(),
+        "/add" : (context) => AddLanguage(),
+      },
     );
   }
 }
@@ -31,22 +35,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-List<bool> selects = [false, false, false, false, false, false];
-List<Language> languages = [
-  Language("Android Nativo", "Linguagens C, Java, Kotlin"),
-  Language("Ionic", "Linguagens JavaScript e TypeScript"),
-  Language("IOS", "Linguagens Objective C e Swift"),
-  Language("Flutter", "Linguagem Dart"),
-  Language("React Native", "Linguagens JavaScript e TypeScript"),
-  Language("PWA", "Linguagens JavaScript e TypeScript")
-];
+
+List<Language> languages = [];
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Escolha de linguagens"),
+        title: const Text("Escolha de linguagens"),
+        actions: [
+          IconButton(
+            onPressed: _goToNewLanguage, 
+            icon: const Icon(Icons.add))
+        ],
       ),
       body: Column(
         children: [
@@ -55,6 +57,15 @@ List<Language> languages = [
         ],
        ), 
     );
+  }
+
+  void _goToNewLanguage(){
+    Future future = Navigator.pushNamed(context, "/add");
+    future.then((language) => {
+      setState((){
+        languages.add(language);
+      })
+    });
   }
 
   List<Widget> buildChoices(){
